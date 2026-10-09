@@ -33,3 +33,14 @@ async def cmd_group(message: Message):
 async def quiz_start(callback: CallbackQuery):
     await callback.answer("Начинаем игру!!!", show_alert=True)
     await callback.message.answer("Первый вопрос: Второй закон Ньютона?")
+
+
+
+@router_commands.message(F.sticker)
+async def get_sticker_id(message: Message):
+    await message.answer(f'ID этого стикера - {message.sticker.file_id}')
+
+
+@router_commands.message(Command('sticker'))
+async def sticker_handler(message: Message):
+    await message.answer_sticker('CAACAgQAAxkBAANHasjwovX_4jciexabnTfLXO2mIAgAAjQaAAIwDvhTjfmtysL48cw9BA')
