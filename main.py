@@ -6,7 +6,7 @@ from database import db
 
 
 async def main():
-    db.init_db()
+    await db.init_db()
     # регистрация обработчиков
     dp.include_router(commands.router_commands)
     dp.include_router(fsm_add_product.router_add_product)
