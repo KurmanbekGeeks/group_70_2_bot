@@ -28,3 +28,12 @@ products_detail_table = """
 insert_product_detail = "INSERT INTO products_detail (category, color, product_id, description) VALUES (?, ?, ?, ?)" 
 
 # products.product_id = products_detail.product_id 
+
+select_product_id = "SELECT 1 FROM products WHERE product_id = ?"
+
+
+get_products = """
+SELECT p.name, p.photo, p.price, p.product_id, pd.category, pd.color, pd.description
+FROM products p
+INNER JOIN products_detail pd on p.product_id = pd.product_id
+"""

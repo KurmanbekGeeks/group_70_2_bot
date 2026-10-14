@@ -4,6 +4,8 @@ from aiogram import F, Router
 
 from handlers.keyboards import reply_keyboard, inline_keyboard
 
+from database import db
+
 router_commands = Router()
 
 
@@ -44,3 +46,18 @@ async def get_sticker_id(message: Message):
 @router_commands.message(Command('sticker'))
 async def sticker_handler(message: Message):
     await message.answer_sticker('CAACAgQAAxkBAANHasjwovX_4jciexabnTfLXO2mIAgAAjQaAAIwDvhTjfmtysL48cw9BA')
+
+
+@router_commands.message(Command('products'))
+async def get_products(message: Message):
+    products = await db.get_products_db()
+
+    if not products:
+        await message.answer('В базе товаров нет!')
+        return
+    else: 
+        for name, photo, price, product_id, category, color, description in products:
+
+            await message.answer_photo(photo=photo, 
+                            caption=f'Данные товара: \nНазвание - {name} '
+                            f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}')

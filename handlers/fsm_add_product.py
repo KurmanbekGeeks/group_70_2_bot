@@ -67,6 +67,15 @@ async def add_color(message: Message, state: FSMContext):
 
 @router_add_product.message(Add_product.product_id)
 async def add_product_id(message: Message, state: FSMContext):
+
+    if not message.text.isdigit():
+        await message.answer('Артикул должен быть числом. Введите еще раз!')
+        return
+
+    if await db.product_exists(product_id=message.text):
+        await message.answer("Товар с таким артикулом уже есть в базе! Введите другой:")
+        return
+
     await state.update_data(product_id=message.text)
 
     data = await state.get_data()

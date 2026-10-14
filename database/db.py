@@ -14,10 +14,22 @@ async def init_db():
 
 async def add_product_db(name, price, description, photo, category, color, product_id):
     async with aiosqlite.connect(path_db) as conn:
-        await conn.execute(queries.insert_product, (name, price, photo, product_id))
+        # await conn.execute(queries.insert_product, (name, price, photo, product_id))
         await conn.execute(queries.insert_product_detail, (category, color, product_id, description))
         await conn.commit()
 
+
+async def product_exists(product_id):
+    async with aiosqlite.connect(path_db) as conn:
+        cursor = await conn.execute(queries.select_product_id, (product_id, ))
+        return await cursor.fetchone() is not None
+
+
+async def get_products_db():
+    async with aiosqlite.connect(path_db) as conn:
+        cursor = await conn.execute(queries.get_products)
+        products = await cursor.fetchall()
+    return products
 
 # =====================================================================================
 # import sqlite3
