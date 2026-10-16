@@ -2,7 +2,7 @@ from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery
 from aiogram import F, Router
 
-from handlers.keyboards import reply_keyboard, inline_keyboard
+from handlers.keyboards import reply_keyboard, inline_keyboard, product_actions
 
 from database import db
 
@@ -60,4 +60,5 @@ async def get_products(message: Message):
 
             await message.answer_photo(photo=photo, 
                             caption=f'Данные товара: \nНазвание - {name} '
-                            f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}')
+                            f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}', 
+                            reply_markup=product_actions(product_id=product_id))

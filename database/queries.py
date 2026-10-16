@@ -37,3 +37,6 @@ SELECT p.name, p.photo, p.price, p.product_id, pd.category, pd.color, pd.descrip
 FROM products p
 INNER JOIN products_detail pd on p.product_id = pd.product_id
 """
+
+
+update_product = 'UPDATE {table} SET {field} = ? WHERE product_id = ?'
