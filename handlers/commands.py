@@ -52,13 +52,34 @@ async def sticker_handler(message: Message):
 async def get_products(message: Message):
     products = await db.get_products_db()
 
+    staff = await db.get_staff_list()
+    staff_ids = [user_id for user_id, full_name in staff]
+
     if not products:
         await message.answer('В базе товаров нет!')
         return
     else: 
         for name, photo, price, product_id, category, color, description in products:
 
-            await message.answer_photo(photo=photo, 
-                            caption=f'Данные товара: \nНазвание - {name} '
-                            f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}', 
-                            reply_markup=product_actions(product_id=product_id))
+            if message.from_user.id in staff_ids:
+                await message.answer_photo(photo=photo, 
+                                caption=f'Данные товара: \nНазвание - {name} '
+                                f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}', 
+                                reply_markup=product_actions(product_id=product_id))
+            else:
+                await message.answer_photo(photo=photo, 
+                                caption=f'Данные товара: \nНазвание - {name} '
+                                f'\nЦена - {price} \nОписание - {description} \nКатегория - {category} \nЦвет - {color} \nАртикул - {product_id}')
+
+
+
+@router_commands.message(Command('staff_list'))
+async def get_staff_list(message: Message):
+    staff = await db.get_staff_list()
+    staff_ids = [user_id for user_id, full_name in staff]
+
+    if message.from_user.id in staff_ids:
+        for user_id, full_name in staff:
+            await message.answer(f"ФИО - {full_name}, ID - {user_id}")
+    else: 
+        await message.answer('У вас нет доступов к данной команде!')
